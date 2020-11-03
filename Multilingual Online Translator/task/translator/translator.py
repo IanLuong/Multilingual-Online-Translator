@@ -4,20 +4,35 @@ from bs4 import BeautifulSoup
 
 def create_url():
     url = 'https://context.reverso.net/translation/'
-    language = input(
-        'Type "en" if you want to translate from French into English, or "fr" if you want to translate from '
-        'English into French:')
+    print("Hello, welcome to the translator. Translator supports:\n"
+          "1. Arabic\n"
+          "2. German\n"
+          "3. English\n"
+          "4. Spanish\n"
+          "5. French\n"
+          "6. Hebrew\n"
+          "7. Japanese\n"
+          "8. Dutch\n"
+          "9. Polish\n"
+          "10. Portuguese\n"
+          "11. Romanian\n"
+          "12. Russian\n"
+          "13. Turkish\n")
+    src_language = get_language_string(input('Type the number of your language:'))
+    url += src_language.lower()
+    trg_language = get_language_string(input('Type the number of language you want to translate to:'))
+    url += "-" + trg_language.lower() + "/"
     word = input('Type the word you want to translate:')
-    print('You chose', language, 'as the language to translate', word, 'to.')
-    if language == 'fr':
-        url += 'english-french/'
-        language = 'French'
-    else:
-        url += 'french-english/'
-        language = 'English'
     url += word
     print(url)
-    return url, language
+    return url, trg_language
+
+
+def get_language_string(language):
+    languages = {"1": "Arabic", "2": "German", "3": "English", "4": "Spanish", "5": "French",
+                 "6": "Hebrew", "7": "Japanese", "8": "Dutch", "9": "Polish", "10": "Portuguese",
+                 "11": "Romanian", "12": "Russian", "13": "Turkish"}
+    return languages.get(language)
 
 
 def make_get_request(search_url):
@@ -37,7 +52,7 @@ def print_translations(web_page, language):
 def print_examples(web_page, language):
     start_index = 33 if language == 'English' else 34
     examples = [sentence.text.strip() for sentence
-                in web_page.find_all('span', class_='text')[start_index:start_index+10]]
+                in web_page.find_all('span', class_='text')[start_index:start_index + 10]]
     src_examples = examples[::2]
     trg_examples = examples[1::2]
 
